@@ -31,6 +31,7 @@ async def get_items(
         result = result.skip(skip)
     if limit is not None:
         result = result.limit(limit)
+
     result = await result.to_list(length=None)
     return result
 
@@ -38,7 +39,9 @@ async def get_items(
 async def update(collection_name, item, _id):
     database = get_database()
     collection = database[collection_name]
-    result = await collection.update_one({"_id": ObjectId(_id)}, {"$set": item}, upsert=False)
+    result = await collection.update_one(
+        {"_id": ObjectId(_id)}, {"$set": item}, upsert=False
+    )
     return result.modified_count
 
 
@@ -47,7 +50,17 @@ async def get_item(collection_name, filters=None, projection=None):
     database = get_database()
     collection = database[collection_name]
     result = await collection.find_one(
-        filter=filters or {},
+        filters or {},
         projection=projection or None,
     )
-    return dict(result)
+    return result
+
+
+async def get_item_id(collection_name, _id):
+    """Get record of a collection"""
+    database = get_database()
+    collection = database[collection_name]
+    result = await collection.find_one(
+        {"_id": ObjectId(_id)},
+    )
+    return result

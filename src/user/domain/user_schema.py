@@ -12,6 +12,5 @@ class ResponseLogin(BaseModel):
 
 
 class User(BaseModel):
-    username: str
     email: Union[str, None] = None
     active: Union[bool, None] = None

@@ -15,7 +15,7 @@ router = APIRouter()
 async def login(user: Login) -> ResponseLogin:
     try:
         user_dic = dict(user)
-        val_user = await authenticate_user(user_dic["email"], user_dic["password"])
+        val_user = await authenticate_user(user_dic.get("email"), user_dic.get("password"))
         if not val_user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -24,7 +24,7 @@ async def login(user: Login) -> ResponseLogin:
             )
         access_token_expires = timedelta(minutes=SETTINGS.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = await create_access_token(
-            data={"sub": val_user["username"], "scopes": val_user["scopes"]},
+            data={"sub": user_dic.get("email"), "scopes": val_user["scopes"]},
             expires_delta=access_token_expires,
         )
         return ResponseLogin(token=access_token)

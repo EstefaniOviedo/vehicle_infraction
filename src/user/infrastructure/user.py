@@ -31,20 +31,8 @@ async def get_password_hash(password):
 # Search user in database
 async def get_user(email: str):
     filter = {"email": email}
-    projection = {}
     # Find in database
-    find_user = await get_item("users", filter, projection)
-    if find_user:
-        return find_user
-    return None
-
-
-# Search user in database
-async def get_username(email: str):
-    filter = {"email": email}
-    projection = {"username": 1, "email": 1, "active": 1}
-    # Find in database
-    find_user = await get_item("users", filter, projection)
+    find_user = await get_item("users", filter)
     if find_user:
         return find_user
     return None

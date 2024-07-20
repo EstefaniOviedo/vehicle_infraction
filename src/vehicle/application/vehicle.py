@@ -65,7 +65,6 @@ async def update_vehicle(
             "message": "Registro actualizado exitosamente",
             "data": response,
         }
-        print("Result---->", result)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
